@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get_core/src/get_main.dart';
 import 'package:jaudi/src/features/authentication/screens/login/login_screen.dart';
+import 'package:jaudi/src/features/core/screens/home_screen/home_screen.dart';
 
 
 import '../../../../commom_widgets/alert_dialog.dart';
@@ -145,7 +146,7 @@ class _LoginFormState extends State<LoginForm> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LoginScreen()),
+                            builder: (context) => const HomeScreen()),
                       );
 
                       ScaffoldMessenger.of(context).showSnackBar(

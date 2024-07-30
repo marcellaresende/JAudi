@@ -1,4 +1,4 @@
-const String tWelcomeImage = "assets/images/logoJAudi.png";
+const String welcomeImage = "assets/images/logoJAudi.png";
 
 const String forgetPasswordImage = "assets/images/logoJAudi.png";
 

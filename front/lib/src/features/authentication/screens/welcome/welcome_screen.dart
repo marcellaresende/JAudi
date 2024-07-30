@@ -53,7 +53,7 @@ class WelcomeScreen extends StatelessWidget{
                   Hero(
                     tag: 'welcome-image-tag',
                     child: Image(
-                      image: const AssetImage(tWelcomeImage),
+                      image: const AssetImage(welcomeImage),
                       height: height * 0.6,
                     ),
                   ),

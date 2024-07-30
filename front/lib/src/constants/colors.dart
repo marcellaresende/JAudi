@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-const primaryColor = Color(0xFFD85334);
+const primaryColor = Color(0xFF445648);
 const secondaryColor = Color(0xFF272727);
-const accentColor = Color(0xFF005224);
+const accentColor = Color(0xFF3F453F);
 
 const cardBgColor = Color(0xFFF7F6F1);
 const whiteColor = Color(0xFFFFFFFF);

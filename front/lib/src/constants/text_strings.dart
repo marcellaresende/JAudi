@@ -23,8 +23,8 @@ const String tAppName = "JAudi Representações";
 
 
 //Welcome Screen
-const String tWelcomeTitle = "Bem vindo a JAudi Representações";
-const String tWelcomeSubTitle = "Representação e Consultoria Comercial de matéria-prima para móveis";
+const String tWelcomeTitle = "Bem vindo a JAudi ";
+const String tWelcomeSubTitle = "Representações Comerciais";
 
 //Login Screen
 const String tLoginTitle = "Bem vindo de volta,";
@@ -34,7 +34,7 @@ const String tDontHaveAnAccount = "Não possui uma conta?";
 
 //SignUp Screen
 const String tSignUpTitle = "Hora de se tornar JAudi";
-const String tSignUpSubTitle = "Crie seu perfil e comece essa jornada com A.G.Ente...";
+const String tSignUpSubTitle = "Crie seu perfil e comece o gerenciamento";
 const String tAlreadyHaveAnAccount = "Já possui uma conta?";
 const String tNumberOfCharacters = "Contém pelo menos oito caracteres";
 const String tUppercaseCharacter = "Contém pelo menos um carácter maiúsculo";
@@ -42,12 +42,12 @@ const String tLowercaseCharacter = "Contém pelo menos um carácter minúsculo";
 const String tNumberCharacter = "Contém pelo menos um número";
 const String tSpecialCharacter = "Contém pelo menos um carácter especial";
 
-//Register Client Screen
-const String registerClientTitle = "Mais um cliente A.G.E";
-const String registerClientSubTitle = "Cadastre seu novo cliente";
-const String cep = "CEP";
-const String complement = "Complemento";
-const String number = "Número";
+//Register Supplier Business Screen
+const String tRegisterSupplierBusinessTitle = "Mais um cliente JAudi";
+const String tRegisterSupplierBusinessSubTitle = "Cadastre seu novo cliente";
+const String tRegisterSupplierBusiness = "Registrar um novo fornecedor";
+const String tName = "Nome";
+
 
 
 //Forget Password
@@ -63,35 +63,28 @@ const String otpMessage = "Insira o código enviado por ";
 const String code = "Código ";
 
 //Initial central logged screen
-const String homePageTitle = "Olá, ";
-const String exploreServices = "Explore seus serviços";
-const String exploreTechnician = "Pesquise seus funcionários";
-const String nextService = "Seu próximo serviço";
-const String controlCenter = "Central de Controle";
-const String yourComissions = "Suas comissões";
-const String registerClient = "Registrar um novo cliente";
-const String clients = "Clientes cadastrados";
-const String registerWorker = "Registrar um novo funcionário";
-const String workers = "Funcionários cadastrados";
-const String registerService = "Registrar um novo serviço";
-const String serviceHistory = "Histórico de serviços";
-const String dashboards = "Dashboards";
-const String comissionControl = "Controle de comissões";
+const String tHomePageTitle = "Olá, ";
+const String tExplore = "Pesquise seus pedidos";
+const String tControlCenter = "Central de Controle";
+const String tYourComissions = "Suas comissões";
+const String tSupplierBusiness = "Fornecedores cadastrados";
+const String tDashboards = "Dashboards";
+const String tComissionControl = "Controle de comissões";
 
 //Profile screen
-const String profile = "Perfil";
-const String editProfile = "Editar perfil";
-const String logout = "Sair";
-const String profileHeading = "Nome usuário";
-const String profileSubHeading = "Email usuário";
-const String settings = "Configurações";
-const String information = "Informações";
-const String userManagement = "Configurações do usuário";
+const String tProfile = "Perfil";
+const String tEditProfile = "Editar perfil";
+const String tLogout = "Sair";
+const String tProfileHeading = "Nome usuário";
+const String tProfileSubHeading = "Email usuário";
+const String tSettings = "Configurações";
+const String tInformation = "Informações";
+const String tUserManagement = "Configurações do usuário";
 
 //Update profile screen
-const String delete = "Deletar";
-const String joined = "Cliente desde ";
-const String joinedAt = "data entrada da central no sistema";
+const String tDelete = "Deletar";
+const String tJoined = "Cliente desde ";
+const String tJoinedAt = "data entrada da central no sistema";
 
 //Update client screen
 const String editClient = "Editar cliente";
