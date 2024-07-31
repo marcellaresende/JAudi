@@ -1,10 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_utils/get_utils.dart';
-import 'package:jaudi/src/features/authentication/screens/login/login_screen.dart';
-
-
 import '../../../../commom_widgets/fade_in_animation/animation_design.dart';
 import '../../../../commom_widgets/fade_in_animation/fade_in_animation_controller.dart';
 import '../../../../commom_widgets/fade_in_animation/fade_in_animation_model.dart';
@@ -12,6 +8,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../login/login_screen.dart';
 import '../signup/signup_screen.dart';
 
 
@@ -72,7 +69,7 @@ class WelcomeScreen extends StatelessWidget{
                   ),
                   LayoutBuilder(
                     builder: (context, constraints) {
-                      if (constraints.maxWidth < 800) {
+                      if (constraints.maxWidth < 600) {
                         return Row(
                           children: [
                             Expanded(
@@ -95,7 +92,7 @@ class WelcomeScreen extends StatelessWidget{
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: constraints.maxWidth * 0.3,
+                              width: constraints.maxWidth * 0.4,
                               child: OutlinedButton(
                                 onPressed: () => Get.to(() => const LoginScreen()),
                                 child: Text(tLogin.toUpperCase()),
@@ -103,7 +100,7 @@ class WelcomeScreen extends StatelessWidget{
                             ),
                             const SizedBox(width: 10.0),
                             SizedBox(
-                              width: constraints.maxWidth * 0.3,
+                              width: constraints.maxWidth * 0.4,
                               child: ElevatedButton(
                                 onPressed: () => Get.to(() => SignUpScreen()),
                                 child: Text(tSignUp.toUpperCase()),

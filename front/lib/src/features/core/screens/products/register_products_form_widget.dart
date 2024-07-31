@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jaudi/src/features/core/screens/products/products.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/supplier_business.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
@@ -13,68 +14,104 @@ import '../../../authentication/screens/signup/central_manager.dart';
 import '../home_screen/home_screen.dart';
 
 
-class RegisterSupplierBusinessFormWidget extends StatefulWidget {
-  const RegisterSupplierBusinessFormWidget({
+class RegisterProductsFormWidget extends StatefulWidget {
+  const RegisterProductsFormWidget({
     super.key,
   });
 
   @override
-  _RegisterSupplierBusinessFormWidget createState() => _RegisterSupplierBusinessFormWidget();
+  _RegisterProductsFormWidget createState() => _RegisterProductsFormWidget();
 
 }
 
-class _RegisterSupplierBusinessFormWidget extends State<RegisterSupplierBusinessFormWidget> {
-  final TextEditingController supplierBusinessController = TextEditingController();
+class _RegisterProductsFormWidget extends State<RegisterProductsFormWidget> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
   final TextEditingController cnpjController = TextEditingController();
+
+
+  Future<int?> fetchSupplierId(String cnpj) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/supplierBusiness/byCnpj/$cnpj'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['id'];
+      } else {
+        print(cnpj);
+        print(response.body);
+        print('Erro ao buscar o SupplierId. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro ao buscar o SupplierId: $e');
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
-    Future<void> registerClient(VoidCallback onSuccess) async {
-      String supplierBusiness = supplierBusinessController.text;
+    Future<void> registerProduct(VoidCallback onSuccess) async {
+      String name = nameController.text;
+      String price = priceController.text;
       String cnpj = cnpjController.text;
 
-
-      if (supplierBusiness.isEmpty ||
-          cnpj.isEmpty) {
+      if (name.isEmpty || price.isEmpty || cnpj.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome e cpf são obrigatórios.');
+                errorDescription: 'Os campos nome, preço e CNPJ são obrigatórios.');
           },
         );
         return;
       }
 
-      if (supplierBusiness.length == 1) {
+      if (name.length == 1) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'O nome deve conter mais que um carácter');
+                errorDescription: 'O nome deve conter mais que um caractere');
           },
         );
         return;
       }
 
-      if (cnpjController.text.replaceAll(RegExp(r'\D'), '').length != 14) {
+      if (cnpj.replaceAll(RegExp(r'\D'), '').length != 14) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription:
-                'O número do CNPJ deve conter exatamente 14 dígitos.');
+                errorDescription: 'O número do CNPJ deve conter exatamente 14 dígitos.');
           },
         );
         return;
       }
 
-      SupplierBusinessRequest supplierBusinessRequest = SupplierBusinessRequest(
-          name: supplierBusiness,
-          cnpj: cnpj,
+      final supplierId = await fetchSupplierId(cnpj);
+      if (supplierId == null) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'Fornecedor não encontrado para o CNPJ fornecido.');
+          },
+        );
+        return;
+      }
+
+      ProductsRequest productsRequest = ProductsRequest(
+          name: name,
+          price: price,
+          supplierId: supplierId
       );
 
-      String requestBody = jsonEncode(supplierBusinessRequest.toJson());
+      String requestBody = jsonEncode(productsRequest.toJson());
       print(requestBody);
 
       try {
@@ -89,11 +126,9 @@ class _RegisterSupplierBusinessFormWidget extends State<RegisterSupplierBusiness
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           onSuccess.call();
-          print('Registration successful!');
-        }  else {
-          // Registration failed
-          print('Login failed. Status code: ${response.statusCode}');
-
+          print('Cadastro realizado com sucesso!');
+        } else {
+          print('Falha no cadastro. Status code: ${response.statusCode}');
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -102,10 +137,9 @@ class _RegisterSupplierBusinessFormWidget extends State<RegisterSupplierBusiness
               });
         }
       } catch (e) {
-        print('Error occurred: $e');
+        print('Ocorreu um erro: $e');
       }
     }
-
     return Container(
       padding: const EdgeInsets.symmetric(vertical: formHeight - 10),
       child: Form(
@@ -113,11 +147,19 @@ class _RegisterSupplierBusinessFormWidget extends State<RegisterSupplierBusiness
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: supplierBusinessController,
+              controller: nameController,
               decoration: const InputDecoration(
                   label: Text(tName),
                   prefixIcon: Icon(Icons.person_outline_rounded)
               ),
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: priceController,
+              decoration: const InputDecoration(
+                  label: Text(tPrice), prefixIcon: Icon(Icons.attach_money_rounded)
+              ),
+              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(
@@ -134,7 +176,7 @@ class _RegisterSupplierBusinessFormWidget extends State<RegisterSupplierBusiness
               child: ElevatedButton(
                 onPressed: () {
 
-                  registerClient(() {
+                  registerProduct(() {
                     Navigator.push(
                         context,
                         MaterialPageRoute(

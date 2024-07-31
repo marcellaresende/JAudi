@@ -1,17 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:jaudi/src/features/core/screens/supplier_business/register_supplier_business_form_widget.dart';
+import 'package:jaudi/src/features/core/screens/worker/register_worker_form_widget.dart';
 import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../home_screen/widgets/app_bar.dart';
 
-
-class RegisterSupplierBusinessScreen extends StatelessWidget{
-  const RegisterSupplierBusinessScreen({Key? key}) : super(key: key);
-
+class RegisterWorkerScreen extends StatelessWidget{
+  const RegisterWorkerScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +36,17 @@ class RegisterSupplierBusinessScreen extends StatelessWidget{
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         image: welcomeImage,
-                        title: tRegisterSupplierBusinessTitle,
-                        subTitle: tRegisterSupplierBusinessSubTitle,
+                        title: registerWorkerTilte,
+                        subTitle: registerWorkerSubTitle,
                         imageHeight: 0.15,
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Center(
-                    child: SizedBox(
+                    child: Container(
                       width: elementWidth,
-                      child: const RegisterSupplierBusinessFormWidget(),
+                      child: const RegisterWorkerFormWidget(),
                     ),
                   ),
                 ],

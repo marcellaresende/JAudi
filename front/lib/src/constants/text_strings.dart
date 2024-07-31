@@ -21,7 +21,6 @@ const String tNext = "Próximo";
 const String tSearch = "Pesquisar";
 const String tAppName = "JAudi Representações";
 
-
 //Welcome Screen
 const String tWelcomeTitle = "Bem vindo a JAudi ";
 const String tWelcomeSubTitle = "Representações Comerciais";
@@ -42,14 +41,6 @@ const String tLowercaseCharacter = "Contém pelo menos um carácter minúsculo";
 const String tNumberCharacter = "Contém pelo menos um número";
 const String tSpecialCharacter = "Contém pelo menos um carácter especial";
 
-//Register Supplier Business Screen
-const String tRegisterSupplierBusinessTitle = "Mais um cliente JAudi";
-const String tRegisterSupplierBusinessSubTitle = "Cadastre seu novo cliente";
-const String tRegisterSupplierBusiness = "Registrar um novo fornecedor";
-const String tName = "Nome";
-
-
-
 //Forget Password
 const String resetViaEmail = "Mude sua senha com a verificação do email";
 const String forgetPasswordSubTitle = "Coloque seu email cadastrado para receber o código";
@@ -67,9 +58,13 @@ const String tHomePageTitle = "Olá, ";
 const String tExplore = "Pesquise seus pedidos";
 const String tControlCenter = "Central de Controle";
 const String tYourComissions = "Suas comissões";
+const String tRegisterSupplierBusiness = "Registrar um novo fornecedor";
 const String tSupplierBusiness = "Fornecedores cadastrados";
+const String tRegisterProducts = "Registrar produtos";
 const String tDashboards = "Dashboards";
 const String tComissionControl = "Controle de comissões";
+const String tRegisterWorker = "Registrar um novo funcionário";
+const String tWorkers = "Funcionários cadastrados";
 
 //Profile screen
 const String tProfile = "Perfil";
@@ -86,9 +81,17 @@ const String tDelete = "Deletar";
 const String tJoined = "Cliente desde ";
 const String tJoinedAt = "data entrada da central no sistema";
 
+
+//Register Supplier Business Screen
+const String tRegisterSupplierBusinessTitle = "Mais um cliente JAudi";
+const String tRegisterSupplierBusinessSubTitle = "Cadastre seu novo cliente";
+const String tName = "Nome";
+
+//Register Product Screen
+const String tPrice = "Preço";
+
 //Update client screen
 const String editClient = "Editar cliente";
-
 
 //Client List Screen
 const String clientListSubTitle = "Encontre seus clientes!";

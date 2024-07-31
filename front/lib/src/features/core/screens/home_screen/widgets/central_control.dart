@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jaudi/src/features/core/screens/products/register_products_screen.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/register_supplier_business_form_widget.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/supplier_business_list_screen.dart';
+import 'package:jaudi/src/features/core/screens/worker/register_worker_screen.dart';
 import '../../../../../constants/colors.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
 import '../../supplier_business/register_supplier_business_screen.dart';
+import '../../worker/worker_list_screen.dart';
 
 class CentralControl extends StatelessWidget {
   const CentralControl({
@@ -26,6 +29,66 @@ class CentralControl extends StatelessWidget {
           runSpacing: homePadding,
           alignment: WrapAlignment.center,
           children: [
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => const RegisterWorkerScreen()),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.person_add, size: 40, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          tRegisterWorker,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => const WorkerListScreen()),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.person_search, size: 40, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          tWorkers,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
@@ -86,40 +149,10 @@ class CentralControl extends StatelessWidget {
                 ),
               ),
             ),
-            /*FractionallySizedBox(
-              widthFactor: 0.3,
-              child: ElevatedButton(
-                onPressed: () => Get.to(() => const RegisterWorkerScreen()),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: cardBgColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: SizedBox(
-                  height: 150,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.person_add, size: 40, color: darkColor),
-                      const SizedBox(height: 10),
-                      Flexible(
-                        child: Text(
-                          registerWorker,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const WorkerListScreen()),
+                onPressed: () => Get.to(() => const RegisterProductsScreen()),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -130,11 +163,11 @@ class CentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.person_search, size: 40, color: darkColor),
+                      const Icon(Icons.window_rounded, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          workers,
+                          tRegisterProducts,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
@@ -146,6 +179,7 @@ class CentralControl extends StatelessWidget {
                 ),
               ),
             ),
+            /*
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
@@ -236,7 +270,6 @@ class CentralControl extends StatelessWidget {
                 ),
               ),
             ),*/
-            const SizedBox(width: homeCardPadding,),
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jaudi/src/features/core/screens/products/register_products_form_widget.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/register_supplier_business_form_widget.dart';
 import '../../../../commom_widgets/form_header_widget.dart';
 import '../../../../constants/images_strings.dart';
@@ -9,8 +10,8 @@ import '../../../../constants/text_strings.dart';
 import '../home_screen/widgets/app_bar.dart';
 
 
-class RegisterSupplierBusinessScreen extends StatelessWidget{
-  const RegisterSupplierBusinessScreen({Key? key}) : super(key: key);
+class RegisterProductsScreen extends StatelessWidget{
+  const RegisterProductsScreen({Key? key}) : super(key: key);
 
 
   @override
@@ -48,7 +49,7 @@ class RegisterSupplierBusinessScreen extends StatelessWidget{
                   Center(
                     child: SizedBox(
                       width: elementWidth,
-                      child: const RegisterSupplierBusinessFormWidget(),
+                      child: const RegisterProductsFormWidget(),
                     ),
                   ),
                 ],
@@ -60,7 +61,6 @@ class RegisterSupplierBusinessScreen extends StatelessWidget{
     );
   }
 }
-
 
 
 

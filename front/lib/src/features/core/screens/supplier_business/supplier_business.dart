@@ -1,3 +1,5 @@
+import 'package:jaudi/src/features/core/screens/products/products.dart';
+
 class SupplierBusinessRequest {
   final String name;
   final String cnpj;
@@ -21,7 +23,7 @@ class  SupplierBusinessResponse{
   final String creationDate;
   final String cnpj;
   final num responsibleCentralId;
-  final List<String> products;
+  final List<ProductsResponse> products;
 
   SupplierBusinessResponse({required this.id, required this.name, required this.creationDate, required this.cnpj, required this.responsibleCentralId,
     required this.products});

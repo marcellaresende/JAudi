@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jaudi/src/features/core/screens/home_screen/widgets/app_bar.dart';
 import 'package:jaudi/src/features/core/screens/home_screen/widgets/central_control.dart';
+import 'package:jaudi/src/features/core/screens/home_screen/widgets/search_bar.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
@@ -31,15 +32,14 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
 
             //Heading
-            Text(tHomePageTitle,
-                //+ CentralManager.instance.loggedUser!.central.name,
+            Text(tHomePageTitle + CentralManager.instance.loggedUser!.central.name,
               style: Theme.of(context).textTheme.bodyText2,
             ),
             Text(tExplore, style: Theme.of(context).textTheme.headline2,),
             const SizedBox(height: homePadding,),
 
             //Search Box
-            const SearchBar(),
+            const HomeSearchBar(),
             const SizedBox(height: homePadding,),
 
             //Control Center

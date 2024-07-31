@@ -2,51 +2,62 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
-import 'package:jaudi/src/features/core/screens/home_screen/home_screen.dart';
+import 'package:jaudi/src/features/core/screens/worker/worker.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
-
-
 import '../../../../commom_widgets/alert_dialog.dart';
 import '../../../../constants/colors.dart';
-import '../../../../constants/images_strings.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
-import '../../../authentication/screens/signup/central.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import '../../../authentication/screens/welcome/welcome_screen.dart';
+import '../home_screen/home_screen.dart';
 
-class UpdateProfileScreen extends StatefulWidget {
-  const UpdateProfileScreen({super.key});
-
+class UpdateWorkerScreen extends StatefulWidget {
+  const UpdateWorkerScreen({super.key, required this.worker});
+  final WorkersList worker;
+  
   @override
-  _UpdateProfileScreenState createState() => _UpdateProfileScreenState();
+  _UpdateWorkerScreenState createState() => _UpdateWorkerScreenState();
 }
 
-class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  final TextEditingController centralController = TextEditingController(text: CentralManager.instance.loggedUser!.central.name);
-  final TextEditingController emailController = TextEditingController(text: CentralManager.instance.loggedUser!.central.email);
-  final TextEditingController cnpjController = TextEditingController(text: CentralManager.instance.loggedUser!.central.cnpj);
-  final TextEditingController cellphoneController = TextEditingController(text: CentralManager.instance.loggedUser!.central.cellphone);
+class _UpdateWorkerScreenState extends State<UpdateWorkerScreen> {
+  final TextEditingController workerController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController cpfController = TextEditingController();
+  final TextEditingController cellphoneController = TextEditingController();
   final TextEditingController currentPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  bool _clearFieldCentral = false;
+
+  @override
+  void initState() {
+    super.initState();
+    workerController.text = widget.worker.name;
+    emailController.text = widget.worker.email;
+    cpfController.text = widget.worker.cpf;
+    cellphoneController.text = widget.worker.cellphone;
+
+  }
+
+  bool _clearFieldWorkerName = false;
   bool _clearFieldEmail = false;
-  bool _clearFieldCnpj = false;
+  bool _clearFieldCpf = false;
   bool _clearFieldCellphone = false;
   bool _clearFieldCurrentPassword = false;
   bool _showNewPassword = false;
 
-  bool isValidEmail(String tEmail) {
+  bool isValidEmail(String email) {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return emailRegExp.hasMatch(tEmail);
+    return emailRegExp.hasMatch(email);
   }
 
   final FocusNode _passwordFocusNode = FocusNode();
+  bool _isVisiblePassword = false;
+  bool _isVisibleConfirmPassword = false;
   bool _isPasswordEightCharacters = false;
   bool _hasPasswordOneNumber = false;
   bool _hasPasswordUppercase = false;
@@ -61,42 +72,42 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
     setState(() {
       _isPasswordEightCharacters = false;
-      if(password.length >= 8)
+      if (password.length >= 8)
         _isPasswordEightCharacters = true;
 
       _hasPasswordOneNumber = false;
-      if(numericRegex.hasMatch(password))
+      if (numericRegex.hasMatch(password))
         _hasPasswordOneNumber = true;
 
       _hasPasswordUppercase = false;
-      if(upperRegex.hasMatch(password))
+      if (upperRegex.hasMatch(password))
         _hasPasswordUppercase = true;
 
       _hasPasswordLowercase = false;
-      if(lowerRegex.hasMatch(password))
+      if (lowerRegex.hasMatch(password))
         _hasPasswordLowercase = true;
 
       _hasPasswordSpecialCharacters = false;
-      if(specialRegex.hasMatch(password))
+      if (specialRegex.hasMatch(password))
         _hasPasswordSpecialCharacters = true;
-
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
-    Future<void> updateCentral(VoidCallback onSuccess) async {
-      String central = centralController.text;
+    Future<void> updateWorker(VoidCallback onSuccess) async {
+      String workerName = workerController.text;
       String cellphone = cellphoneController.text;
       String email = emailController.text;
-      String cnpj = cnpjController.text;
+      String cpf = cpfController.text;
       String currentPassword = currentPasswordController.text;
       String? newPassword = newPasswordController.text;
-      num id = CentralManager.instance.loggedUser!.central.id;
 
-      if (central.isEmpty ||
+      if (workerName.isEmpty ||
           cellphone.isEmpty ||
           email.isEmpty ||
+          cpf.isEmpty ||
           currentPassword.isEmpty) {
         showDialog(
           context: context,
@@ -108,7 +119,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         return;
       }
 
-      if (central.length == 1) {
+      if (workerName.length == 1) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -119,36 +130,36 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         return;
       }
 
-      if (!isValidEmail(tEmail)) {
+      if (!isValidEmail(email)) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'O tEmail inserido é inválido.');
+                errorDescription: 'O email inserido é inválido.');
           },
         );
         return;
       }
 
-      if (cnpjController.text.replaceAll(RegExp(r'\D'), '').length != 14) {
+      if (cpfController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
                 errorDescription:
-                'O número do CNPJ deve conter exatamente 14 dígitos.');
+                'O número do CPF deve conter exatamente 11 dígitos.');
           },
         );
         return;
       }
 
-      if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length < 10) {
+      if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
                 errorDescription:
-                'O número de telefone deve conter no mínimo 10 dígitos, incluindo o DDD.');
+                'O número de celular deve conter 11 dígitos, incluindo o DDD.');
           },
         );
         return;
@@ -158,20 +169,24 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         newPassword = null;
       }
 
-      UpdateCentralRequest updateCentralRequest = UpdateCentralRequest(
-          name: central,
-          email: tEmail,
-          cnpj: tCnpj,
-          cellphone: tCellphone,
-          oldPassword: tCurrentPassword,
-          newPassword : tNewPassword
+
+      UpdateWorkerRequest updateWorkerRequest = UpdateWorkerRequest(
+        name: workerName,
+        email: email,
+        cpf: cpf,
+        cellphone: cellphone,
+        oldPassword: currentPassword,
+        newPassword : newPassword
       );
 
-      String requestBody = jsonEncode(updateCentralRequest.toJson());
+      String requestBody = jsonEncode(updateWorkerRequest.toJson());
+
+      print(requestBody);
+      print(widget.worker.id);
 
       try {
         final response = await http.put(
-          Uri.parse('http://localhost:8080/api/central/update/$id'),
+          Uri.parse('http://localhost:8080/api/central/worker/${widget.worker.id}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
@@ -184,17 +199,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           print('Registration successful!');
         } else {
           print('Registration failed. Status code: ${response.statusCode}');
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertPopUp(
+                    errorDescription: response.body);
+              });
         }
       } catch (e) {
         print('Error occurred: $e');
       }
     }
 
-    Future<void> tDeleteCentral() async {
-      num id = CentralManager.instance.loggedUser!.central.id;
+    Future<void> deleteWorker() async {
 
       final response = await http.delete(
-        Uri.parse('http://localhost:8080/api/central/$id'),
+        Uri.parse('http://localhost:8080/api/central/worker/${widget.worker.id}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
@@ -204,6 +224,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         setState(() {
           Navigator.pop(context, true);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Serviço excluído com sucesso!')),
+          );
         });
       }
     }
@@ -211,7 +234,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(tEditProfile, style: Theme.of(context).textTheme.headline4),
+        title: Text(editWorker, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -232,33 +255,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   padding: const EdgeInsets.symmetric(vertical: formHeight - 10),
                   child: Column(
                     children: [
-                      Stack(
+                      const Stack(
                         children: [
                           SizedBox(
                             width: 120,
                             height: 120,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: const Image(image: AssetImage(userProfileImage)),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: GestureDetector(
-                              onTap: () {
-                                // Implementar lógica para alterar foto
-                              },
-                              child: Container(
-                                width: 35,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: primaryColor,
-                                ),
-                                child: const Icon(LineAwesomeIcons.camera, color: Colors.black, size: 20),
-                              ),
-                            ),
+                            child: Icon(LineAwesomeIcons.user_edit, color: primaryColor, size: 100),
                           ),
                         ],
                       ),
@@ -267,17 +269,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         child: Column(
                           children: [
                             TextFormField(
-                              controller: centralController,
+                              controller: workerController,
                               decoration: InputDecoration(
-                                labelText: tCentral,
+                                labelText: tFullName,
                                 prefixIcon: const Icon(LineAwesomeIcons.user),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
                                   onPressed: () {
                                     setState(() {
-                                      _clearFieldCentral = true;
-                                      if (_clearFieldCentral) {
-                                        centralController.clear();
+                                      _clearFieldWorkerName = true;
+                                      if (_clearFieldWorkerName) {
+                                        workerController.clear();
                                       }
                                     });
                                   },
@@ -305,20 +307,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             ),
                             const SizedBox(height: formHeight - 20),
                             TextFormField(
-                              controller: cnpjController,
+                              controller: cpfController,
                               inputFormatters: [
-                                MaskTextInputFormatter(mask: '##.###.###/####-##'),
+                                MaskTextInputFormatter(mask: '###.###.###-##',),
                               ],
                               decoration: InputDecoration(
-                                labelText: tCnpj,
+                                labelText: tCpf,
                                 prefixIcon: const Icon(Icons.numbers),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),
                                   onPressed: () {
                                     setState(() {
-                                      _clearFieldCnpj = true;
-                                      if (_clearFieldCnpj) {
-                                        cnpjController.clear();
+                                      _clearFieldCpf = true;
+                                      if (_clearFieldCpf) {
+                                        cpfController.clear();
                                       }
                                     });
                                   },
@@ -329,7 +331,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             TextFormField(
                               controller: cellphoneController,
                               inputFormatters: [
-                                MaskTextInputFormatter(mask: '(##) #####-####'),
+                                MaskTextInputFormatter(mask: '(##) #####-####',),
                               ],
                               decoration: InputDecoration(
                                 labelText: tCellphone,
@@ -412,20 +414,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         width: 14,
                                         height: 14,
                                         decoration: BoxDecoration(
-                                          color: _isPasswordEightCharacters ? Colors.green : Colors.transparent,
-                                          border: _isPasswordEightCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                          borderRadius: BorderRadius.circular(50),
+                                            color: _isPasswordEightCharacters ? Colors.green : Colors.transparent,
+                                            border: _isPasswordEightCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
                                         ),
                                         child: const Center(
                                           child: Icon(
-                                            Icons.check,
-                                            color: whiteColor,
-                                            size: 10,
+                                            Icons.check, color: whiteColor, size: 10,
                                           ),
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(tNumberCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tNumberOfCharacters, style: Theme.of(context).textTheme.overline)
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -436,20 +436,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         width: 14,
                                         height: 14,
                                         decoration: BoxDecoration(
-                                          color: _hasPasswordOneNumber ? Colors.green : Colors.transparent,
-                                          border: _hasPasswordOneNumber ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                          borderRadius: BorderRadius.circular(50),
+                                            color: _hasPasswordOneNumber ? Colors.green : Colors.transparent,
+                                            border: _hasPasswordOneNumber ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
                                         ),
                                         child: const Center(
-                                          child: Icon(
-                                            Icons.check,
-                                            color: whiteColor,
-                                            size: 10,
-                                          ),
+                                            child: Icon(
+                                              Icons.check,
+                                              color: whiteColor,
+                                              size: 10,
+                                            )
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(tNumberCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tNumberCharacter, style: Theme.of(context).textTheme.overline)
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -460,9 +460,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         width: 14,
                                         height: 14,
                                         decoration: BoxDecoration(
-                                          color: _hasPasswordLowercase ? Colors.green : Colors.transparent,
-                                          border: _hasPasswordLowercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                          borderRadius: BorderRadius.circular(50),
+                                            color: _hasPasswordLowercase ? Colors.green : Colors.transparent,
+                                            border: _hasPasswordLowercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
                                         ),
                                         child: const Center(
                                           child: Icon(
@@ -473,7 +473,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(tLowercaseCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tLowercaseCharacter, style: Theme.of(context).textTheme.overline)
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -484,9 +484,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         width: 14,
                                         height: 14,
                                         decoration: BoxDecoration(
-                                          color: _hasPasswordUppercase ? Colors.green : Colors.transparent,
-                                          border: _hasPasswordUppercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                          borderRadius: BorderRadius.circular(50),
+                                            color: _hasPasswordUppercase ? Colors.green : Colors.transparent,
+                                            border: _hasPasswordUppercase ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
                                         ),
                                         child: const Center(
                                           child: Icon(
@@ -497,7 +497,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(tUppercaseCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tUppercaseCharacter, style: Theme.of(context).textTheme.overline)
                                     ],
                                   ),
                                   const SizedBox(height: formHeight - 29),
@@ -508,9 +508,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         width: 14,
                                         height: 14,
                                         decoration: BoxDecoration(
-                                          color: _hasPasswordSpecialCharacters ? Colors.green : Colors.transparent,
-                                          border: _hasPasswordSpecialCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
-                                          borderRadius: BorderRadius.circular(50),
+                                            color: _hasPasswordSpecialCharacters ? Colors.green : Colors.transparent,
+                                            border: _hasPasswordSpecialCharacters ? Border.all(color: Colors.transparent) : Border.all(color: primaryColor),
+                                            borderRadius: BorderRadius.circular(50)
                                         ),
                                         child: const Center(
                                           child: Icon(
@@ -521,10 +521,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         ),
                                       ),
                                       const SizedBox(width: formHeight - 25),
-                                      Text(tSpecialCharacter, style: Theme.of(context).textTheme.overline),
+                                      Text(tSpecialCharacter, style: Theme.of(context).textTheme.overline)
                                     ],
                                   ),
-                                  const SizedBox(height: formHeight - 29),
+                                  const SizedBox(height: formHeight - 29)
                                 ],
                               ),
                             ),
@@ -535,23 +535,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 onPressed: () {
                                   String currentPassword = currentPasswordController.text;
                                   String newPassword = newPasswordController.text;
-                                  String central = centralController.text;
-                                  String cellphone = cellphoneController.text;
-                                  String email = emailController.text;
-
-                                  if (central.isEmpty ||
-                                      cellphone.isEmpty ||
-                                      email.isEmpty ||
-                                      currentPassword.isEmpty) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return const AlertPopUp(
-                                            errorDescription: 'Todos os campos são obrigatórios.');
-                                      },
-                                    );
-                                    return;
-                                  }
 
                                   if (newPassword.isNotEmpty &&
                                       currentPassword == newPassword) {
@@ -563,11 +546,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       },
                                     );
                                   } else {
-                                    updateCentral(() {
+                                    updateWorker(() {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => const WelcomeScreen())
+                                              builder: (context) => const HomeScreen())
                                       );
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(content: Text('Atualização Realizada')),
@@ -588,11 +571,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: tJoined,
+                                    text: joinedWorker,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(
-                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(CentralManager.instance.loggedUser!.central.creationDate)),
+                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.worker.entryDate)),
                                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
                                     ],
                                   ),
@@ -604,13 +587,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       titleStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                       content: const Padding(
                                         padding: EdgeInsets.symmetric(vertical: 15.0),
-                                        child: Text("Tem certeza que deseja excluir o seu perfil?"),
+                                        child: Text("Tem certeza que deseja excluir esse funcionário?"),
                                       ),
                                       confirm: Expanded(
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            tDeleteCentral();
-                                            Get.to(const WelcomeScreen());
+                                            deleteWorker();
+                                            Get.to(const HomeScreen());
                                           },
                                           style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, side: BorderSide.none),
                                           child: const Text("Sim"),

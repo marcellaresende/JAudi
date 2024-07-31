@@ -13,6 +13,7 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../forget_password/forget_password_screen.dart';
 import '../signup/central.dart';
+import '../signup/central_manager.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -65,7 +66,7 @@ class _LoginFormState extends State<LoginForm> {
 
           final central = CentralResponse.fromJson(jsonData['central']);
 
-          //CentralManager.instance.loggedUser = LoggedCentral(token, central);
+          CentralManager.instance.loggedUser = LoggedCentral(token, central);
           onSuccess.call();
         } else {
           // Registration failed
