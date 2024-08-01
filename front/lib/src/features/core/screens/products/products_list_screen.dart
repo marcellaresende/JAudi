@@ -6,56 +6,55 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:jaudi/src/features/core/screens/profile/update_profile_screen.dart';
-import 'package:jaudi/src/features/core/screens/supplier_business/supplier_business.dart';
-import 'package:jaudi/src/features/core/screens/supplier_business/update_supplier_business_screen.dart';
+import 'package:jaudi/src/features/core/screens/home_screen/widgets/app_bar.dart';
+import 'package:jaudi/src/features/core/screens/products/products.dart';
+import 'package:jaudi/src/features/core/screens/products/update_product_screen.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
-import '../home_screen/widgets/app_bar.dart';
+import '../worker/update_worker_screen.dart';
 
-class SupplierBusinessListScreen extends StatefulWidget {
-  const SupplierBusinessListScreen({Key? key}) : super(key: key);
+
+class ProductsListScreen extends StatefulWidget {
+  const ProductsListScreen({Key? key}) : super(key: key);
 
   @override
-  _SupplierBusinessListScreenState createState() => _SupplierBusinessListScreenState();
+  _ProductsListScreenState createState() => _ProductsListScreenState();
 }
 
-class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen> {
+class _ProductsListScreenState extends State<ProductsListScreen> {
   bool searchBarInUse = false;
-  late Future<List<SupplierBusinessResponse>> futureData;
+  late Future<List<ProductsResponse>> futureData;
 
   TextEditingController searchController = TextEditingController();
 
-  late List<SupplierBusinessResponse> supplierBusinessList;
-  late List<SupplierBusinessResponse> filteredSupplierBusinessList;
+  late List<ProductsResponse> productList;
+  late List<ProductsResponse> filteredProductList;
 
   @override
   void initState() {
     super.initState();
-    futureData = getAllSuppliersBusiness();
+    futureData = getAllProducts();
     searchController.addListener(_onSearchChanged);
-    supplierBusinessList = [];
-    filteredSupplierBusinessList = [];
+    productList = [];
+    filteredProductList = [];
   }
-
 
   void _onSearchChanged() {
     setState(() {
-      filteredSupplierBusinessList = supplierBusinessList.where((supplierBusiness) {
-        final name = supplierBusiness.name.toLowerCase();
+      filteredProductList = productList.where((product) {
+        final name = product.name.toLowerCase();
         final query = searchController.text.toLowerCase();
         return name.contains(query);
       }).toList();
     });
   }
 
-  Future<List<SupplierBusinessResponse>> getAllSuppliersBusiness() async {
+  Future<List<ProductsResponse>> getAllProducts() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/supplierBusiness'),
+        Uri.parse('http://localhost:8080/api/central/product'),
         headers: {
           'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
         },
@@ -65,39 +64,36 @@ class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen>
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List<dynamic>;
 
-        final List<SupplierBusinessResponse> suppliersBusinessList = [];
+        final List<ProductsResponse> productsList = [];
         for (var item in jsonData) {
-          final supplierBusiness = SupplierBusinessResponse(
-              id: item['id'],
-              name: item['name'],
-              creationDate: item['creationDate'],
-              cnpj: item['cnpj'],
-              responsibleCentralId: item['responsibleCentralId'],
-              products: null,
+          final product = ProductsResponse(
+            id: item['id'],
+            name: item['name'],
+            price: item['price'],
+            supplierId: item['supplierId'],
+            lastTimePurchase: item['lastTimePurchase'],
+            oldPrices: item['oldPrices'],
+            creationDate: item['creationDate']
           );
-
-          suppliersBusinessList.add(supplierBusiness);
+          productsList.add(product);
         }
 
         setState(() {
-          supplierBusinessList = suppliersBusinessList;
-          filteredSupplierBusinessList = suppliersBusinessList;
+          productList = productsList;
+          filteredProductList = productsList;
         });
 
-
-        return supplierBusinessList;
+        return productList;
       } else {
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
-        throw Exception('Failed to load client list');
+        throw Exception('Failed to load product list');
       }
-
     } catch (e) {
       print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de clientes');
+      throw Exception('Falha ao carregar a lista de workeres');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -116,16 +112,14 @@ class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen>
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 Text(
-                  tSupplierBusinessListSubTitle,
+                  tProductsListSubTitle,
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding),
                 //Search Box
                 Container(
-                  decoration: const BoxDecoration(
-                      border: Border(left: BorderSide(width: 4))),
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -137,8 +131,7 @@ class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen>
                           },
                           decoration: InputDecoration(
                             hintText: tSearch,
-                            hintStyle:
-                            TextStyle(color: Colors.grey.withOpacity(0.5)),
+                            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 _onSearchChanged();
@@ -160,9 +153,9 @@ class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen>
             child: Padding(
               padding: const EdgeInsets.all(homeCardPadding),
               child: ListView.builder(
-                itemCount: filteredSupplierBusinessList.length,
+                itemCount: filteredProductList.length,
                 itemBuilder: (context, index) {
-                  final supplierBusiness = filteredSupplierBusinessList[index];
+                  final product = filteredProductList[index];
                   return Card(
                     elevation: 3,
                     color: cardBgColor,
@@ -172,26 +165,24 @@ class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen>
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Flexible(
+                              Expanded(
                                 child: Row(
                                   children: [
                                     const Icon(
-                                      Icons.business_center_rounded,
+                                      Icons.person_outline_rounded,
                                       color: darkColor,
                                       size: 35,
                                     ),
                                     const SizedBox(width: 5),
-                                    Flexible(
+                                    Expanded(
                                       child: Text(
-                                        supplierBusiness.name,
-                                        style: GoogleFonts.poppins(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.w800,
-                                            color: darkColor),
+                                        product.name,
+                                        style: GoogleFonts.poppins(fontSize: 20.0, fontWeight: FontWeight.w800, color: darkColor),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -201,7 +192,7 @@ class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen>
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.to(() => UpdateSupplierBusinessScreen(supplierBusiness: supplierBusiness));
+                                  Get.to(() => UpdateProductScreen(product: product));
                                 },
                                 icon: const Icon(Icons.edit, color: darkColor),
                               ),
@@ -212,18 +203,15 @@ class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
-                                Icons.numbers_rounded,
+                                Icons.attach_money_rounded,
                                 color: darkColor,
                                 size: 20,
                               ),
                               const SizedBox(width: 5),
-                              Flexible(
+                              Expanded(
                                 child: Text(
-                                  supplierBusiness.cnpj,
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: darkColor),
+                                  product.price as String,
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -235,24 +223,22 @@ class _SupplierBusinessListScreenState extends State<SupplierBusinessListScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
-                                Icons.calendar_today,
+                                Icons.business_center,
                                 color: darkColor,
                                 size: 20,
                               ),
                               const SizedBox(width: 5),
-                              Flexible(
+                              Expanded(
                                 child: Text(
-                                  DateFormat('dd/MM/yyyy').format(DateTime.parse(supplierBusiness.creationDate)),
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: darkColor),
+                                  product.supplierId as String,
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
                           ),
+                          const SizedBox(height: 5),
                         ],
                       ),
                     ),

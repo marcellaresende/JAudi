@@ -23,7 +23,7 @@ class  SupplierBusinessResponse{
   final String creationDate;
   final String cnpj;
   final num responsibleCentralId;
-  final List<ProductsResponse> products;
+  final List<ProductsResponse>? products;
 
   SupplierBusinessResponse({required this.id, required this.name, required this.creationDate, required this.cnpj, required this.responsibleCentralId,
     required this.products});

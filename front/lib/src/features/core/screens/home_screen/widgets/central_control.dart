@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jaudi/src/features/core/screens/products/products_list_screen.dart';
 import 'package:jaudi/src/features/core/screens/products/register_products_screen.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/register_supplier_business_form_widget.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/supplier_business_list_screen.dart';
 import 'package:jaudi/src/features/core/screens/worker/register_worker_screen.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import '../../../../../constants/colors.dart';
 import '../../../../../constants/sizes.dart';
 import '../../../../../constants/text_strings.dart';
@@ -133,11 +135,11 @@ class CentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.person_search, size: 40, color: darkColor),
+                      const Icon(Icons.business, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          tSupplierBusiness,
+                          tSupplierBusinessList,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
@@ -163,7 +165,7 @@ class CentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.window_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.add_box_rounded, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
@@ -179,11 +181,10 @@ class CentralControl extends StatelessWidget {
                 ),
               ),
             ),
-            /*
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const RegisterAssistanceScreen()),
+                onPressed: () => Get.to(() => const ProductsListScreen()),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -194,11 +195,11 @@ class CentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.work, size: 40, color: darkColor),
+                      const Icon(Icons.gif_box_rounded, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          registerService,
+                          tProductsList,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
@@ -210,7 +211,7 @@ class CentralControl extends StatelessWidget {
                 ),
               ),
             ),
-            FractionallySizedBox(
+            /*FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
                 onPressed: () => Get.to(() => const AssistanceListScreen()),

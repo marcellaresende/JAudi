@@ -59,8 +59,9 @@ const String tExplore = "Pesquise seus pedidos";
 const String tControlCenter = "Central de Controle";
 const String tYourComissions = "Suas comissões";
 const String tRegisterSupplierBusiness = "Registrar um novo fornecedor";
-const String tSupplierBusiness = "Fornecedores cadastrados";
+const String tSupplierBusinessList = "Fornecedores cadastrados";
 const String tRegisterProducts = "Registrar produtos";
+const String tProductsList = "Produtos cadastrados";
 const String tDashboards = "Dashboards";
 const String tComissionControl = "Controle de comissões";
 const String tRegisterWorker = "Registrar um novo funcionário";
@@ -83,12 +84,27 @@ const String tJoinedAt = "data entrada da central no sistema";
 
 
 //Register Supplier Business Screen
-const String tRegisterSupplierBusinessTitle = "Mais um cliente JAudi";
-const String tRegisterSupplierBusinessSubTitle = "Cadastre seu novo cliente";
+const String tRegisterSupplierBusinessTitle = "Mais um fornecedor JAudi";
+const String tRegisterSupplierBusinessSubTitle = "Cadastre seu novo fornecedor";
 const String tName = "Nome";
+
+//Supplier Business List Screen
+const String tSupplierBusinessListSubTitle = "Encontre seus fornecedores!";
+
+//Update Supplier Business Screen
+const String tEditSupplierBusiness = "Editar fornecedor";
+const String tJoinedSupplierBusiness = "Fornecedor desde ";
 
 //Register Product Screen
 const String tPrice = "Preço";
+
+//Product List Screen
+const String tSupplierBusiness = "Forncedor";
+const String tProductsListSubTitle = "Encontre seus funcionários!";
+
+//Update Product Screen
+const String tEditProduct = "Editar produto";
+
 
 //Update client screen
 const String editClient = "Editar cliente";

@@ -29,30 +29,6 @@ class _RegisterProductsFormWidget extends State<RegisterProductsFormWidget> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController cnpjController = TextEditingController();
 
-
-  Future<int?> fetchSupplierId(String cnpj) async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:8080/api/supplierBusiness/byCnpj/$cnpj'),
-        headers: {
-          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return data['id'];
-      } else {
-        print(cnpj);
-        print(response.body);
-        print('Erro ao buscar o SupplierId. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Erro ao buscar o SupplierId: $e');
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     Future<void> registerProduct(VoidCallback onSuccess) async {
@@ -93,22 +69,10 @@ class _RegisterProductsFormWidget extends State<RegisterProductsFormWidget> {
         return;
       }
 
-      final supplierId = await fetchSupplierId(cnpj);
-      if (supplierId == null) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(
-                errorDescription: 'Fornecedor não encontrado para o CNPJ fornecido.');
-          },
-        );
-        return;
-      }
-
       ProductsRequest productsRequest = ProductsRequest(
           name: name,
           price: price,
-          supplierId: supplierId
+          supplierCnpj: cnpj
       );
 
       String requestBody = jsonEncode(productsRequest.toJson());
@@ -116,7 +80,7 @@ class _RegisterProductsFormWidget extends State<RegisterProductsFormWidget> {
 
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:8080/api/central/supplierBusiness'),
+          Uri.parse('http://localhost:8080/api/central/product'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
@@ -150,7 +114,7 @@ class _RegisterProductsFormWidget extends State<RegisterProductsFormWidget> {
               controller: nameController,
               decoration: const InputDecoration(
                   label: Text(tName),
-                  prefixIcon: Icon(Icons.person_outline_rounded)
+                  prefixIcon: Icon(Icons.business_rounded)
               ),
             ),
             const SizedBox(height: formHeight - 20),
