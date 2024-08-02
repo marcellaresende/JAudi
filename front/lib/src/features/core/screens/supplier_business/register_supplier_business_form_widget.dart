@@ -116,7 +116,7 @@ class _RegisterSupplierBusinessFormWidget extends State<RegisterSupplierBusiness
               controller: supplierBusinessController,
               decoration: const InputDecoration(
                   label: Text(tName),
-                  prefixIcon: Icon(Icons.person_outline_rounded)
+                  prefixIcon: Icon(Icons.business_rounded)
               ),
             ),
             const SizedBox(height: formHeight - 20),
@@ -126,7 +126,7 @@ class _RegisterSupplierBusinessFormWidget extends State<RegisterSupplierBusiness
                 MaskTextInputFormatter(mask: '##.###.###/####-##',),
               ],
               decoration: const InputDecoration(
-                  label: Text(tCnpj), prefixIcon: Icon(Icons.numbers)),
+                  label: Text(tCnpj), prefixIcon: Icon(Icons.numbers_rounded)),
             ),
             const SizedBox(height: formHeight - 10),
             SizedBox(

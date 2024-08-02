@@ -125,7 +125,7 @@ class _UpdateSupplierBusinessScreenState extends State<UpdateSupplierBusinessScr
     Future<void> deleteWorker() async {
 
       final response = await http.delete(
-        Uri.parse('http://localhost:8080/api/central/supplierBusiness/${widget.supplierBusiness.id}'),
+        Uri.parse('http://llocalhost:8080/api/central/supplierBusiness/${widget.supplierBusiness.id}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',

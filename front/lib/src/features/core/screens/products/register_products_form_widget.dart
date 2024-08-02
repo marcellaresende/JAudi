@@ -114,7 +114,7 @@ class _RegisterProductsFormWidget extends State<RegisterProductsFormWidget> {
               controller: nameController,
               decoration: const InputDecoration(
                   label: Text(tName),
-                  prefixIcon: Icon(Icons.business_rounded)
+                  prefixIcon: Icon(Icons.add_box_rounded)
               ),
             ),
             const SizedBox(height: formHeight - 20),

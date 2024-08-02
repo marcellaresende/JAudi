@@ -192,7 +192,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                               controller: priceController,
                               keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                               decoration: InputDecoration(
-                                labelText: tEmail,
+                                labelText: tPrice,
                                 prefixIcon: const Icon(Icons.attach_money_rounded),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.edit),

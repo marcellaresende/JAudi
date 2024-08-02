@@ -96,6 +96,8 @@ const String tEditSupplierBusiness = "Editar fornecedor";
 const String tJoinedSupplierBusiness = "Fornecedor desde ";
 
 //Register Product Screen
+const String tRegisterProductTitle = "Mais um fornecedor JAudi";
+const String tRegisterProductSubTitle = "Cadastre seu novo fornecedor";
 const String tPrice = "Preço";
 
 //Product List Screen

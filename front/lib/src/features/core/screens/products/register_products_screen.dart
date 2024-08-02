@@ -39,8 +39,8 @@ class RegisterProductsScreen extends StatelessWidget{
                       child: const FormHeaderWidget(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         image: welcomeImage,
-                        title: tRegisterSupplierBusinessTitle,
-                        subTitle: tRegisterSupplierBusinessSubTitle,
+                        title: tRegisterProductTitle,
+                        subTitle: tRegisterProductSubTitle,
                         imageHeight: 0.15,
                       ),
                     ),

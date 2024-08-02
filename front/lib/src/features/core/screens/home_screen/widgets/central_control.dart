@@ -195,7 +195,7 @@ class CentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.gif_box_rounded, size: 40, color: darkColor),
+                      const Icon(Icons.check_box_outline_blank_rounded, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
