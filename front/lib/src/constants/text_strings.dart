@@ -100,10 +100,11 @@ const String tPrice = "Preço";
 
 //Product List Screen
 const String tSupplierBusiness = "Forncedor";
-const String tProductsListSubTitle = "Encontre seus funcionários!";
+const String tProductsListSubTitle = "Encontre seus produtos!";
 
 //Update Product Screen
 const String tEditProduct = "Editar produto";
+const String tJoinedProduct = "Criado em: ";
 
 
 //Update client screen

@@ -28,40 +28,31 @@ class UpdateProductScreen extends StatefulWidget {
 class _UpdateProductScreenState extends State<UpdateProductScreen> {
   final TextEditingController productController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  final TextEditingController supplierIdController = TextEditingController();
-
 
   @override
   void initState() {
     super.initState();
     productController.text = widget.product.name;
-    priceController.text = widget.product.price as String;
-    supplierIdController.text = widget.product.supplierId as String;
-
-
+    priceController.text = widget.product.price.toStringAsFixed(2);
   }
 
   bool _clearFieldWorkerName = false;
   bool _clearFieldPrice = false;
-  bool _clearFieldSupplierId = false;
 
   bool isValidEmail(String email) {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return emailRegExp.hasMatch(email);
   }
-  
-  
+
 
   @override
   Widget build(BuildContext context) {
-    Future<void> updateWorker(VoidCallback onSuccess) async {
+    Future<void> updateProduct(VoidCallback onSuccess) async {
       String productName = productController.text;
       String price = priceController.text;
-      String supplierId = supplierIdController.text;
 
       if (productName.isEmpty ||
-          price.isEmpty ||
-          supplierId.isEmpty) {
+          price.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -82,11 +73,11 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
         );
         return;
       }
-
-      UpdateProductRequest updateProductRequest = UpdateProductRequest(
+      
+      UpdateProductsRequest updateProductRequest = UpdateProductsRequest(
         name: productName,
         price: price,
-        supplierId: supplierId
+        supplierCnpj: null
       );
 
       String requestBody = jsonEncode(updateProductRequest.toJson());
@@ -144,7 +135,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(editWorker, style: Theme.of(context).textTheme.headline4),
+        title: Text(tEditProduct, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -199,6 +190,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                             const SizedBox(height: formHeight - 20),
                             TextFormField(
                               controller: priceController,
+                              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                               decoration: InputDecoration(
                                 labelText: tEmail,
                                 prefixIcon: const Icon(Icons.attach_money_rounded),
@@ -214,38 +206,18 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                                   },
                                 ),
                               ),
-                              keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
                             ),
-                            const SizedBox(height: formHeight - 20),
-                            TextFormField(
-                              controller: supplierIdController,
-                              decoration: InputDecoration(
-                                labelText: tSupplierBusiness,
-                                prefixIcon: const Icon(LineAwesomeIcons.business_time),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    setState(() {
-                                      _clearFieldSupplierId = true;
-                                      if (_clearFieldSupplierId) {
-                                        supplierIdController.clear();
-                                      }
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-
                             const SizedBox(height: formHeight),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  updateWorker(() {
+                                  updateProduct(() {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const HomeScreen())
+                                            builder: (context) => const HomeScreen()
+                                        )
                                     );
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Atualização Realizada')),
@@ -265,7 +237,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: joinedWorker,
+                                    text: tJoinedProduct,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(

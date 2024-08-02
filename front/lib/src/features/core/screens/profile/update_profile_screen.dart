@@ -41,9 +41,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   bool _clearFieldCurrentPassword = false;
   bool _showNewPassword = false;
 
-  bool isValidEmail(String tEmail) {
+  bool isValidEmail(String email) {
     final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return emailRegExp.hasMatch(tEmail);
+    return emailRegExp.hasMatch(email);
   }
 
   final FocusNode _passwordFocusNode = FocusNode();
@@ -119,12 +119,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         return;
       }
 
-      if (!isValidEmail(tEmail)) {
+      if (!isValidEmail(email)) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'O tEmail inserido é inválido.');
+                errorDescription: 'O email inserido é inválido.');
           },
         );
         return;
@@ -160,11 +160,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
       UpdateCentralRequest updateCentralRequest = UpdateCentralRequest(
           name: central,
-          email: tEmail,
-          cnpj: tCnpj,
-          cellphone: tCellphone,
-          oldPassword: tCurrentPassword,
-          newPassword : tNewPassword
+          email: email,
+          cnpj: cnpj,
+          cellphone: cellphone,
+          oldPassword: currentPassword,
+          newPassword : newPassword
       );
 
       String requestBody = jsonEncode(updateCentralRequest.toJson());

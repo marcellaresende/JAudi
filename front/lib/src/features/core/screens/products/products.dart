@@ -66,10 +66,10 @@ class ProductsResponse {
     return ProductsResponse(
       id: json['id'],
       name: json['name'],
-      price: double.parse(json['price']), // Ensure price is parsed as double
+      price: double.parse(json['price'].toString()),
       supplierId: json['supplierId'],
       lastTimePurchase: json['lastTimePurchase'],
-      oldPrices: List<double>.from(json['oldPrices']), // Ensuring correct parsing
+      oldPrices: (json['oldPrices'] as List<dynamic>).map((price) => double.parse(price.toString())).toList(),
       creationDate: json['creationDate'],
     );
   }
@@ -88,19 +88,26 @@ class ProductsResponse {
 }
 
 
-class  UpdateProductRequest {
+class UpdateProductsRequest {
   final String name;
   final String price;
-  final String supplierId;
+  final String? supplierCnpj;
 
-  UpdateProductRequest({required this.name, required this.price, required this.supplierId,});
+  UpdateProductsRequest({
+    required this.name,
+    required this.price,
+    required this.supplierCnpj,
+  });
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'price' : price,
-      'supplierId': supplierId,
+      'price': price,
+      'supplierCnpj': supplierCnpj
     };
   }
 }
+
+
+
 

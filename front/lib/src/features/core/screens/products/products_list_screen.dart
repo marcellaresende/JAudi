@@ -13,6 +13,7 @@ import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
+import '../supplier_business/supplier_business.dart';
 import '../worker/update_worker_screen.dart';
 
 
@@ -31,6 +32,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
 
   late List<ProductsResponse> productList;
   late List<ProductsResponse> filteredProductList;
+  late Map<int, String> suppliersMap;
 
   @override
   void initState() {
@@ -39,6 +41,8 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     searchController.addListener(_onSearchChanged);
     productList = [];
     filteredProductList = [];
+    suppliersMap = {};
+    getAllSuppliersBusiness();
   }
 
   void _onSearchChanged() {
@@ -51,10 +55,10 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     });
   }
 
-  Future<List<ProductsResponse>> getAllProducts() async {
+  Future<void> getAllSuppliersBusiness() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8080/api/central/product'),
+        Uri.parse('http://localhost:8080/api/central/supplierBusiness'),
         headers: {
           'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
         },
@@ -64,19 +68,39 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List<dynamic>;
 
-        final List<ProductsResponse> productsList = [];
+        final Map<int, String> suppliersMapTemp = {};
+
         for (var item in jsonData) {
-          final product = ProductsResponse(
-            id: item['id'],
-            name: item['name'],
-            price: item['price'],
-            supplierId: item['supplierId'],
-            lastTimePurchase: item['lastTimePurchase'],
-            oldPrices: item['oldPrices'],
-            creationDate: item['creationDate']
-          );
-          productsList.add(product);
+          final supplierBusiness = SupplierBusinessResponse.fromJson(item);
+          suppliersMapTemp[supplierBusiness.id] = supplierBusiness.name;
         }
+
+        setState(() {
+          suppliersMap = suppliersMapTemp;
+        });
+      } else {
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to load client list');
+      }
+    } catch (e) {
+      print('Erro ao fazer a solicitação HTTP: $e');
+      throw Exception('Falha ao carregar a lista de clientes');
+    }
+  }
+
+  Future<List<ProductsResponse>> getAllProducts() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:8080/api/central/product'),
+        headers: {
+          'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body) as List<dynamic>;
+        final List<ProductsResponse> productsList = jsonData.map((item) => ProductsResponse.fromJson(item)).toList();
 
         setState(() {
           productList = productsList;
@@ -85,13 +109,12 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
 
         return productList;
       } else {
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        print('Failed to load product list: ${response.statusCode}');
         throw Exception('Failed to load product list');
       }
     } catch (e) {
-      print('Erro ao fazer a solicitação HTTP: $e');
-      throw Exception('Falha ao carregar a lista de workeres');
+      print('Error fetching products: $e');
+      throw Exception('Failed to load product list');
     }
   }
 
@@ -116,7 +139,6 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: homePadding),
-                //Search Box
                 Container(
                   decoration: const BoxDecoration(border: Border(left: BorderSide(width: 4))),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -156,6 +178,8 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                 itemCount: filteredProductList.length,
                 itemBuilder: (context, index) {
                   final product = filteredProductList[index];
+                  final supplierName = suppliersMap[product.supplierId] ?? 'Unknown Supplier';
+
                   return Card(
                     elevation: 3,
                     color: cardBgColor,
@@ -210,7 +234,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  product.price as String,
+                                  product.price.toStringAsFixed(2),
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -230,7 +254,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  product.supplierId as String,
+                                  supplierName,
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
