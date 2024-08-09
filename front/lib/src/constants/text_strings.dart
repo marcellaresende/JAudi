@@ -108,6 +108,16 @@ const String tProductsListSubTitle = "Encontre seus produtos!";
 const String tEditProduct = "Editar produto";
 const String tJoinedProduct = "Criado em: ";
 
+//Register Client Business Screen
+const String tRegisterClientBusinessTitle = "Mais um cliente JAudi";
+const String tRegisterClientBusinessSubTitle = "Cadastre seu novo cliente JAudi";
+
+//Client Business List Screen
+const String tClientBusinessListSubTitle = "Encontre seus clientes";
+const String tJoinedClientBusiness = "Cliente desde ";
+
+//Update Client Business Screen
+const String tEditClientBusiness = "Editar cliente";
 
 //Update client screen
 const String editClient = "Editar cliente";

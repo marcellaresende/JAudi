@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
-import 'package:jaudi/src/features/core/screens/products/products.dart';
-import 'package:jaudi/src/features/core/screens/supplier_business/supplier_business.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
@@ -17,45 +15,59 @@ import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
 import '../../../authentication/screens/signup/central_manager.dart';
 import '../home_screen/home_screen.dart';
+import 'client_business.dart';
 
-class UpdateSupplierBusinessScreen extends StatefulWidget {
-  const UpdateSupplierBusinessScreen({super.key, required this.supplierBusiness});
-  final SupplierBusinessResponse supplierBusiness;
+class UpdateClientBusinessScreen extends StatefulWidget {
+  const UpdateClientBusinessScreen({super.key, required this.clientBusiness});
+  final ClientBusinessResponse clientBusiness;
   
   @override
-  _UpdateSupplierBusinessScreenState createState() => _UpdateSupplierBusinessScreenState();
+  _UpdateClientBusinessScreenState createState() => _UpdateClientBusinessScreenState();
 }
 
-class _UpdateSupplierBusinessScreenState extends State<UpdateSupplierBusinessScreen> {
+class _UpdateClientBusinessScreenState extends State<UpdateClientBusinessScreen> {
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
-  final TextEditingController supplierIdController = TextEditingController();
   final TextEditingController cnpjController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController cellphoneController = TextEditingController();
   
 
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.supplierBusiness.name;
-    cnpjController.text = widget.supplierBusiness.cnpj;
+    nameController.text = widget.clientBusiness.name;
+    cnpjController.text = widget.clientBusiness.cnpj;
+    emailController.text = widget.clientBusiness.email;
+    cellphoneController.text = widget.clientBusiness.cellphone;
+  }
+
+  bool isValidEmail(String email) {
+    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    return emailRegExp.hasMatch(email);
   }
 
   bool _clearFieldName = false;
   bool _clearFieldCnpj = false;
+  bool _clearFieldEmail = false;
+  bool _clearFieldCellphone = false;
 
   @override
   Widget build(BuildContext context) {
-    Future<void> updateSupplierBusiness(VoidCallback onSuccess) async {
+    Future<void> updateClientBusiness(VoidCallback onSuccess) async {
       String name = nameController.text;
       String cnpj = cnpjController.text;
+      String email = emailController.text;
+      String cellphone = cellphoneController.text;
 
       if (name.isEmpty ||
-          cnpj.isEmpty) {
+          cnpj.isEmpty ||
+          email.isEmpty ||
+          cellphone.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Todos os campos são obrigatórios.');
+                errorDescription: 'Os campos nome, cnpj, email e celular são obrigatórios.');
           },
         );
         return;
@@ -84,20 +96,45 @@ class _UpdateSupplierBusinessScreenState extends State<UpdateSupplierBusinessScr
         return;
       }
 
+      if (!isValidEmail(email)) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription: 'O email inserido é inválido.');
+          },
+        );
+        return;
+      }
 
-      SupplierBusinessRequest supplierBusinessRequest = SupplierBusinessRequest(
+      if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertPopUp(
+                errorDescription:
+                'O número de celular deve conter 11 dígitos, incluindo o DDD.');
+          },
+        );
+        return;
+      }
+
+
+      ClientBusinessRequest clientBusinessRequest = ClientBusinessRequest(
         name: name,
-        cnpj: cnpj
+        cnpj: cnpj,
+        email: email,
+        cellphone: cellphone,
       );
 
-      String requestBody = jsonEncode(supplierBusinessRequest.toJson());
+      String requestBody = jsonEncode(clientBusinessRequest.toJson());
 
       print(requestBody);
-      print(widget.supplierBusiness.id);
+      print(widget.clientBusiness.id);
 
       try {
         final response = await http.put(
-          Uri.parse('http://localhost:8080/api/central/supplierBusiness/${widget.supplierBusiness.id}'),
+          Uri.parse('http://localhost:8080/api/central/clientBusiness/${widget.clientBusiness.id}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
@@ -125,7 +162,7 @@ class _UpdateSupplierBusinessScreenState extends State<UpdateSupplierBusinessScr
     Future<void> deleteWorker() async {
 
       final response = await http.delete(
-        Uri.parse('http://llocalhost:8080/api/central/supplierBusiness/${widget.supplierBusiness.id}'),
+        Uri.parse('http://llocalhost:8080/api/central/clientBusiness/${widget.clientBusiness.id}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}',
@@ -145,7 +182,7 @@ class _UpdateSupplierBusinessScreenState extends State<UpdateSupplierBusinessScr
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(tEditSupplierBusiness, style: Theme.of(context).textTheme.headline4),
+        title: Text(tEditClientBusiness, style: Theme.of(context).textTheme.headline4),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -219,12 +256,53 @@ class _UpdateSupplierBusinessScreenState extends State<UpdateSupplierBusinessScr
                                 ),
                               ),
                             ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                labelText: tEmail,
+                                prefixIcon: const Icon(LineAwesomeIcons.envelope_1),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldEmail = true;
+                                      if (_clearFieldEmail) {
+                                        emailController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: formHeight - 20),
+                            TextFormField(
+                              controller: cellphoneController,
+                              inputFormatters: [
+                                MaskTextInputFormatter(mask: '(##) #####-####',),
+                              ],
+                              decoration: InputDecoration(
+                                labelText: tCellphone,
+                                prefixIcon: const Icon(LineAwesomeIcons.phone),
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () {
+                                    setState(() {
+                                      _clearFieldCellphone = true;
+                                      if (_clearFieldCellphone) {
+                                        cellphoneController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: formHeight),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  updateSupplierBusiness(() {
+                                  updateClientBusiness(() {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -239,7 +317,7 @@ class _UpdateSupplierBusinessScreenState extends State<UpdateSupplierBusinessScr
                                     backgroundColor: primaryColor,
                                     side: BorderSide.none,
                                     shape: const StadiumBorder()),
-                                child: Text(tEditSupplierBusiness.toUpperCase(), style: const TextStyle(color: darkColor)),
+                                child: Text(tEditClientBusiness.toUpperCase(), style: const TextStyle(color: darkColor)),
                               ),
                             ),
                             const SizedBox(height: formHeight),
@@ -248,11 +326,11 @@ class _UpdateSupplierBusinessScreenState extends State<UpdateSupplierBusinessScr
                               children: [
                                 Text.rich(
                                   TextSpan(
-                                    text: tJoinedSupplierBusiness,
+                                    text: tJoinedClientBusiness,
                                     style: const TextStyle(fontSize: 12),
                                     children: [
                                       TextSpan(
-                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.supplierBusiness.creationDate)),
+                                          text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.clientBusiness.creationDate)),
                                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
                                     ],
                                   ),
