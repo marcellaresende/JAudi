@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jaudi/src/features/core/screens/client_business/client_business_list_screen.dart';
+import 'package:jaudi/src/features/core/screens/client_business/register_client_business_screen.dart';
 import 'package:jaudi/src/features/core/screens/products/products_list_screen.dart';
 import 'package:jaudi/src/features/core/screens/products/register_products_screen.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/register_supplier_business_form_widget.dart';
@@ -140,6 +142,66 @@ class CentralControl extends StatelessWidget {
                       Flexible(
                         child: Text(
                           tSupplierBusinessList,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => const RegisterClientBusinessScreen()),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.add_business_rounded, size: 40, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          tClientBusinessList,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.3,
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => const ClientBusinessListScreen()),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  backgroundColor: cardBgColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                child: SizedBox(
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.business_rounded, size: 40, color: darkColor),
+                      const SizedBox(height: 10),
+                      Flexible(
+                        child: Text(
+                          tClientBusinessList,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,
