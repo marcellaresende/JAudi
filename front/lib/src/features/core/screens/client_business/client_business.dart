@@ -1,7 +1,6 @@
 class ClientBusinessRequest {
   final String name;
   final String cnpj;
-  final String email;
   final String cellphone;
 
 
@@ -9,7 +8,6 @@ class ClientBusinessRequest {
   ClientBusinessRequest({
     required this.name,
     required this.cnpj,
-    required this.email,
     required this.cellphone,
   });
 
@@ -17,7 +15,6 @@ class ClientBusinessRequest {
     return {
       'name': name,
       'cnpj': cnpj,
-      'email': email,
       'cellphone': cellphone,
     };
   }
@@ -27,19 +24,17 @@ class ClientBusinessResponse {
   final int id;
   final String name;
   final String cnpj;
-  final String email;
   final String cellphone;
   final String creationDate;
-  final int responsibleCentralId;
+  final int responsibleCentral;
 
   ClientBusinessResponse({
     required this.id,
     required this.name,
     required this.cnpj,
-    required this.email,
     required this.cellphone,
     required this.creationDate,
-    required this.responsibleCentralId,
+    required this.responsibleCentral,
   });
 
   factory ClientBusinessResponse.fromJson(Map<String, dynamic> json) {
@@ -47,10 +42,9 @@ class ClientBusinessResponse {
       id: json['id'],
       name: json['name'],
       cnpj: json['cnpj'],
-      email: json['email'],
       cellphone: json['cellphone'],
       creationDate: json['creationDate'],
-      responsibleCentralId: json['responsibleCentralId'],
+      responsibleCentral: json['responsibleCentral'],
     );
   }
 
@@ -58,10 +52,9 @@ class ClientBusinessResponse {
     return {
       'name': name,
       'cnpj': cnpj,
-      'email': email,
       'cellphone': cellphone,
       'creationDate': creationDate,
-      'responsibleCentralId': responsibleCentralId
+      'responsibleCentral': responsibleCentral
     };
   }
 }

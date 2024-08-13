@@ -69,13 +69,12 @@ class _ClientBusinessListScreenState extends State<ClientBusinessListScreen> {
         final List<ClientBusinessResponse> clientsBusinessList = [];
         for (var item in jsonData) {
           final clientBusiness = ClientBusinessResponse(
-              id: item['id'],
+              id: item['id'] as int,
               name: item['name'],
               cnpj: item['cnpj'],
-              email: item['email'],
               cellphone: item['cellphone'],
               creationDate: item['creationDate'],
-              responsibleCentralId: item['responsibleCentralId'],
+            responsibleCentral: item['responsibleCentral'] as int,
           );
 
           clientsBusinessList.add(clientBusiness);
@@ -222,29 +221,6 @@ class _ClientBusinessListScreenState extends State<ClientBusinessListScreen> {
                               Flexible(
                                 child: Text(
                                   clientBusiness.cnpj,
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: darkColor),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.email,
-                                color: darkColor,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  clientBusiness.email,
                                   style: GoogleFonts.poppins(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,

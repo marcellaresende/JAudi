@@ -27,32 +27,25 @@ class RegisterClientBusinessFormWidget extends StatefulWidget {
 class _RegisterClientBusinessFormWidget extends State<RegisterClientBusinessFormWidget> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cnpjController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
 
-  bool isValidEmail(String email) {
-    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return emailRegExp.hasMatch(email);
-  }
 
   @override
   Widget build(BuildContext context) {
     Future<void> registerClientBusiness(VoidCallback onSuccess) async {
       String name = nameController.text;
       String cnpj = cnpjController.text;
-      String email = emailController.text;
       String cellphone = cellphoneController.text;
 
 
       if (name.isEmpty ||
           cnpj.isEmpty ||
-          email.isEmpty ||
           cellphone.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome, cnpj, email e celular são obrigatórios.');
+                errorDescription: 'Os campos nome, cnpj e celular são obrigatórios.');
           },
         );
         return;
@@ -81,17 +74,6 @@ class _RegisterClientBusinessFormWidget extends State<RegisterClientBusinessForm
         return;
       }
 
-      if (!isValidEmail(email)) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(
-                errorDescription: 'O email inserido é inválido.');
-          },
-        );
-        return;
-      }
-
       if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
         showDialog(
           context: context,
@@ -109,7 +91,6 @@ class _RegisterClientBusinessFormWidget extends State<RegisterClientBusinessForm
       ClientBusinessRequest nameRequest = ClientBusinessRequest(
           name: name,
           cnpj: cnpj,
-          email: email,
           cellphone: cellphone,
         
       );
@@ -119,7 +100,7 @@ class _RegisterClientBusinessFormWidget extends State<RegisterClientBusinessForm
 
       try {
         final response = await http.post(
-          Uri.parse('http://localhost:8080/api/central/name'),
+          Uri.parse('http://localhost:8080/api/central/clientBusiness'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${CentralManager.instance.loggedUser!.token}'
@@ -167,14 +148,6 @@ class _RegisterClientBusinessFormWidget extends State<RegisterClientBusinessForm
               ],
               decoration: const InputDecoration(
                   label: Text(tCnpj), prefixIcon: Icon(Icons.numbers_rounded)),
-            ),
-            const SizedBox(height: formHeight - 20),
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                  label: Text(tEmail),
-                  prefixIcon: Icon(Icons.email_outlined)
-              ),
             ),
             const SizedBox(height: formHeight - 20),
             TextFormField(

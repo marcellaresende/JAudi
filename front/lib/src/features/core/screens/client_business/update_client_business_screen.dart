@@ -28,7 +28,6 @@ class UpdateClientBusinessScreen extends StatefulWidget {
 class _UpdateClientBusinessScreenState extends State<UpdateClientBusinessScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController cnpjController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
   final TextEditingController cellphoneController = TextEditingController();
   
 
@@ -37,18 +36,11 @@ class _UpdateClientBusinessScreenState extends State<UpdateClientBusinessScreen>
     super.initState();
     nameController.text = widget.clientBusiness.name;
     cnpjController.text = widget.clientBusiness.cnpj;
-    emailController.text = widget.clientBusiness.email;
     cellphoneController.text = widget.clientBusiness.cellphone;
-  }
-
-  bool isValidEmail(String email) {
-    final emailRegExp = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return emailRegExp.hasMatch(email);
   }
 
   bool _clearFieldName = false;
   bool _clearFieldCnpj = false;
-  bool _clearFieldEmail = false;
   bool _clearFieldCellphone = false;
 
   @override
@@ -56,18 +48,16 @@ class _UpdateClientBusinessScreenState extends State<UpdateClientBusinessScreen>
     Future<void> updateClientBusiness(VoidCallback onSuccess) async {
       String name = nameController.text;
       String cnpj = cnpjController.text;
-      String email = emailController.text;
       String cellphone = cellphoneController.text;
 
       if (name.isEmpty ||
           cnpj.isEmpty ||
-          email.isEmpty ||
           cellphone.isEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return const AlertPopUp(
-                errorDescription: 'Os campos nome, cnpj, email e celular são obrigatórios.');
+                errorDescription: 'Os campos nome, cnpj e celular são obrigatórios.');
           },
         );
         return;
@@ -96,16 +86,6 @@ class _UpdateClientBusinessScreenState extends State<UpdateClientBusinessScreen>
         return;
       }
 
-      if (!isValidEmail(email)) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const AlertPopUp(
-                errorDescription: 'O email inserido é inválido.');
-          },
-        );
-        return;
-      }
 
       if (cellphoneController.text.replaceAll(RegExp(r'\D'), '').length != 11) {
         showDialog(
@@ -123,7 +103,6 @@ class _UpdateClientBusinessScreenState extends State<UpdateClientBusinessScreen>
       ClientBusinessRequest clientBusinessRequest = ClientBusinessRequest(
         name: name,
         cnpj: cnpj,
-        email: email,
         cellphone: cellphone,
       );
 
@@ -250,25 +229,6 @@ class _UpdateClientBusinessScreenState extends State<UpdateClientBusinessScreen>
                                       _clearFieldCnpj = true;
                                       if (_clearFieldCnpj) {
                                         cnpjController.clear();
-                                      }
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: formHeight - 20),
-                            TextFormField(
-                              controller: emailController,
-                              decoration: InputDecoration(
-                                labelText: tEmail,
-                                prefixIcon: const Icon(LineAwesomeIcons.envelope_1),
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () {
-                                    setState(() {
-                                      _clearFieldEmail = true;
-                                      if (_clearFieldEmail) {
-                                        emailController.clear();
                                       }
                                     });
                                   },
