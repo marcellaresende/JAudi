@@ -48,7 +48,7 @@ class ProductsResponse {
   final String name;
   final double price;
   final int supplierId;
-  final String? lastTimePurchase; // This can be null
+  final String? lastTimePurchase;
   final List<double> oldPrices;
   final String creationDate;
 
@@ -107,6 +107,48 @@ class UpdateProductsRequest {
     };
   }
 }
+
+class ProductQttRequest {
+  int? qtt;
+  final int idProduct;
+
+  ProductQttRequest({
+    required this.qtt,
+    required this.idProduct
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'qtt': qtt,
+      'idProduct': idProduct
+    };
+  }
+}
+
+class ProductQttResponse {
+  final int? qtt;
+  final int idProduct;
+
+  ProductQttResponse({
+    required this.idProduct,
+    required this.qtt
+  });
+
+  factory ProductQttResponse.fromJson(Map<String, dynamic> json) {
+    return ProductQttResponse(
+      idProduct: json['idProduct'],
+      qtt: json['qtt'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'idProduct': idProduct,
+      'qtt': qtt
+    };
+  }
+}
+
 
 
 

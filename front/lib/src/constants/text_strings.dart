@@ -68,6 +68,7 @@ const String tDashboards = "Dashboards";
 const String tComissionControl = "Controle de comissões";
 const String tRegisterWorker = "Registrar um novo funcionário";
 const String tWorkers = "Funcionários cadastrados";
+const String tRegisterSale = "Registrar uma nova venda";
 
 //Profile screen
 const String tProfile = "Perfil";
@@ -156,3 +157,10 @@ const String editAssistance = "Editar serviço";
 
 //Worker Home Screen
 const String currentAndNextAssistance = "Seu atual ou próximo serviço";
+
+//Register Sale Screen
+  const String tRegisterSaleTitle = "Mais uma venda JAudi";
+const String tRegisterSaleSubTitle = "Cadastre sua nova venda";
+const String tPurchaseOrder = "Número ordem de compra";
+const String tFare = "Frete";
+const String tCarrier = "Transportadora";
