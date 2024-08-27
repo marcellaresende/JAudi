@@ -9,6 +9,7 @@ import 'package:jaudi/src/features/core/screens/client_business/register_client_
 import 'package:jaudi/src/features/core/screens/products/products_list_screen.dart';
 import 'package:jaudi/src/features/core/screens/products/register_products_screen.dart';
 import 'package:jaudi/src/features/core/screens/sale/register_sale_screen.dart';
+import 'package:jaudi/src/features/core/screens/sale/sale_list_screen.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/register_supplier_business_form_widget.dart';
 import 'package:jaudi/src/features/core/screens/supplier_business/supplier_business_list_screen.dart';
 import 'package:jaudi/src/features/core/screens/worker/register_worker_screen.dart';
@@ -64,10 +65,10 @@ class CentralControl extends StatelessWidget {
                 ),
               ),
             ),
-            /*FractionallySizedBox(
+            FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const WorkerListScreen()),
+                onPressed: () => Get.to(() => const SaleListScreen()),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
                   backgroundColor: cardBgColor,
@@ -78,7 +79,7 @@ class CentralControl extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.person_search, size: 40, color: darkColor),
+                      const Icon(Icons.shopping_cart_rounded, size: 40, color: darkColor),
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
@@ -93,7 +94,7 @@ class CentralControl extends StatelessWidget {
                   ),
                 ),
               ),
-            ),*/
+            ),
             FractionallySizedBox(
               widthFactor: 0.3,
               child: ElevatedButton(

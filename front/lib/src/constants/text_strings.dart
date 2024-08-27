@@ -159,8 +159,11 @@ const String editAssistance = "Editar serviço";
 const String currentAndNextAssistance = "Seu atual ou próximo serviço";
 
 //Register Sale Screen
-  const String tRegisterSaleTitle = "Mais uma venda JAudi";
+const String tRegisterSaleTitle = "Mais uma venda JAudi";
 const String tRegisterSaleSubTitle = "Cadastre sua nova venda";
 const String tPurchaseOrder = "Número ordem de compra";
 const String tFare = "Frete";
 const String tCarrier = "Transportadora";
+
+//Update Sale Screen
+const String tEditSale = "Editar Venda";

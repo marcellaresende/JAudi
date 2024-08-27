@@ -30,10 +30,27 @@ class SaleRequest {
   }
 }
 
+
+class SaleInformations {
+  final num id;
+  final String clientBusinessName;
+  final String supplierBusinessName;
+  final SaleResponse sale;
+  final List<String> productNamesWithQuantities;
+
+  SaleInformations(
+      this.id,
+      this.clientBusinessName,
+      this.supplierBusinessName,
+      this.sale,
+      this.productNamesWithQuantities,
+      );
+}
+
 class SaleResponse {
   final num id;
-  final String clientId;
-  final String supplierId;
+  final num clientId;
+  final num supplierId;
   final String purchaseOrder;
   final String carrier;
   final String fare;

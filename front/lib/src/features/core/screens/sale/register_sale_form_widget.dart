@@ -420,7 +420,7 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
                   ),
                 ),
                 child: Text(
-                    selectedClientBusiness?.name ?? '',
+                  selectedClientBusiness?.name ?? '',
                 ),
               ),
             ),
@@ -432,7 +432,7 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
                     onTap: () {
                       setState(() {
                         selectedClientBusiness = clientBusiness;
-                        _isSupplierBusinessExpanded = false;
+                        _isClientsBusinessExpanded = false;
                       });
                     },
                     child: Row(
@@ -443,7 +443,7 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
                           onChanged: (ClientBusinessResponse? value) {
                             setState(() {
                               selectedClientBusiness = value;
-                              _isSupplierBusinessExpanded = false;
+                              _isClientsBusinessExpanded = false;
                             });
                           },
                         ),
