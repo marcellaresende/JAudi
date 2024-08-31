@@ -703,7 +703,7 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
                         children: [
                           Text.rich(
                             TextSpan(
-                              text: tJoinedProduct,
+                              text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.sale.saleDate)),
                               style: const TextStyle(fontSize: 12),
                               children: [
                                 TextSpan(
