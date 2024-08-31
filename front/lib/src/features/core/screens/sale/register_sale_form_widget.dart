@@ -32,6 +32,7 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
   final TextEditingController purchaseOrderController = TextEditingController();
   final TextEditingController carrierController = TextEditingController();
   final TextEditingController fareController = TextEditingController();
+  final TextEditingController billingDateController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
 
   bool _isClientsBusinessExpanded = false;
@@ -164,7 +165,7 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
                                           : null,
                                     ),
                                     const SizedBox(width: 16),
-                                    Expanded(child: Text(product.name)),
+                                    Expanded(child: Text('${product.name} - R\$ ${product.price.toStringAsFixed(2)}')),
                                     const SizedBox(width: 16),
                                     SizedBox(
                                       width: 120,
@@ -211,7 +212,13 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
                     onPressed: () {
                       Navigator.of(context).pop(selectedProducts);
                     },
-                    child: Text('Confirmar'.toUpperCase()),
+                    child: Text(
+                      'Confirmar'.toUpperCase(),
+                      style: const TextStyle(
+                      color: primaryColor,
+                      fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -314,6 +321,7 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
       String purchaseOrder = purchaseOrderController.text;
       String carrier = carrierController.text;
       String fare = fareController.text;
+      String billingDate = billingDateController.text;
       int? selectedClientId = selectedClientBusiness?.id;
       int? selectedSupplierBusinessId = selectedSupplierBusiness?.id;
 
@@ -340,7 +348,8 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
           supplierId: selectedSupplierBusinessId,
           purchaseOrder: purchaseOrder,
           carrier: carrier,
-          fare: fare
+          fare: fare,
+          billingDate: billingDate
       );
 
       String requestBody = jsonEncode(saleRequest.toJson());
@@ -532,6 +541,21 @@ class _RegisterSaleFormWidget extends State<RegisterSaleFormWidget> {
                   label: Text(tFare),
                   prefixIcon: Icon(Icons.attach_money_rounded)
               ),
+            ),
+            const SizedBox(height: formHeight - 20),
+            TextFormField(
+              controller: billingDateController,
+              decoration: const InputDecoration(
+                label: Text(tBillingDate),
+                prefixIcon: Icon(Icons.calendar_today_rounded),
+              ),
+              inputFormatters: [
+                MaskTextInputFormatter(
+                  mask: '##/##/####',
+                  filter: { "#": RegExp(r'[0-9]') },
+                )
+              ],
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: formHeight - 10),
             SizedBox(

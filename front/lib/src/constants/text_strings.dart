@@ -69,7 +69,7 @@ const String tComissionControl = "Controle de comissões";
 const String tRegisterWorker = "Registrar um novo funcionário";
 const String tWorkers = "Funcionários cadastrados";
 const String tRegisterSale = "Registrar uma nova venda";
-
+const String tListSale = "Vendas cadastradas";
 //Profile screen
 const String tProfile = "Perfil";
 const String tEditProfile = "Editar perfil";
@@ -99,8 +99,8 @@ const String tEditSupplierBusiness = "Editar fornecedor";
 const String tJoinedSupplierBusiness = "Fornecedor desde ";
 
 //Register Product Screen
-const String tRegisterProductTitle = "Mais um fornecedor JAudi";
-const String tRegisterProductSubTitle = "Cadastre seu novo fornecedor";
+const String tRegisterProductTitle = "Mais um produto JAudi";
+const String tRegisterProductSubTitle = "Cadastre seu novo produto";
 const String tPrice = "Preço";
 
 //Product List Screen
@@ -164,6 +164,7 @@ const String tRegisterSaleSubTitle = "Cadastre sua nova venda";
 const String tPurchaseOrder = "Número ordem de compra";
 const String tFare = "Frete";
 const String tCarrier = "Transportadora";
+const String tBillingDate = "Data de faturamento";
 
 //Update Sale Screen
 const String tEditSale = "Editar Venda";

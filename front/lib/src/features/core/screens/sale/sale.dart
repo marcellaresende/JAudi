@@ -7,6 +7,7 @@ class SaleRequest {
   final String purchaseOrder;
   final String carrier;
   final String fare;
+  final String billingDate;
 
 
   SaleRequest({
@@ -15,7 +16,8 @@ class SaleRequest {
     required this.supplierId,
     required this.purchaseOrder,
     required this.carrier,
-    required this.fare
+    required this.fare,
+    required this.billingDate
   });
 
   Map<String, dynamic> toJson() {
@@ -25,7 +27,8 @@ class SaleRequest {
       'supplierId': supplierId,
       'purchaseOrder': purchaseOrder,
       'carrier': carrier,
-      'fare': fare
+      'fare': fare,
+      'billingDate': billingDate
     };
   }
 }
@@ -55,10 +58,13 @@ class SaleResponse {
   final String carrier;
   final String fare;
   final List<ProductQttResponse> productsQtt;
+  final String saleDate;
+  final String billingDate;
+  final double totalPrice;
 
 
   SaleResponse({required this.id, required this.clientId,required this.supplierId,required this.purchaseOrder, required this.carrier,
-    required this.fare, required this.productsQtt});
+    required this.fare, required this.productsQtt, required this.saleDate, required this.billingDate, required this.totalPrice});
 
   Map<String, dynamic> toJson() {
     return {

@@ -83,7 +83,7 @@ class CentralControl extends StatelessWidget {
                       const SizedBox(height: 10),
                       Flexible(
                         child: Text(
-                          tWorkers,
+                          tListSale,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w600, color: darkColor),
                           maxLines: 2,

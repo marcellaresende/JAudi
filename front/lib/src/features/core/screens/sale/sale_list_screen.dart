@@ -206,6 +206,9 @@ class _SalesListScreenState extends State<SaleListScreen> {
             carrier: item['carrier'],
             fare: item['fare'],
             productsQtt: productsQtt,
+            saleDate: item['saleDate'],
+            billingDate: item['billingDate'],
+            totalPrice: item['totalPrice']
           );
 
           final saleInformations = SaleInformations(
@@ -394,6 +397,26 @@ class _SalesListScreenState extends State<SaleListScreen> {
                               Expanded(
                                 child: Text(
                                   data.supplierBusinessName,
+                                  style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.attach_money_rounded,
+                                color: darkColor,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                    'R\$ ${data.sale.totalPrice.toStringAsFixed(2)}',
                                   style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.w500, color: darkColor),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,

@@ -34,6 +34,7 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
   final TextEditingController purchaseOrderController = TextEditingController();
   final TextEditingController carrierController = TextEditingController();
   final TextEditingController fareController = TextEditingController();
+  final TextEditingController billingDateController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
 
   bool _isClientsBusinessExpanded = false;
@@ -71,6 +72,7 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
     purchaseOrderController.text = widget.sale.purchaseOrder;
     carrierController.text = widget.sale.carrier;
     fareController.text = widget.sale.fare;
+    billingDateController.text = widget.sale.billingDate;
   }
 
   bool _clearFieldPurchaseOrder = false;
@@ -200,7 +202,7 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
                                           : null,
                                     ),
                                     const SizedBox(width: 16),
-                                    Expanded(child: Text(product.name)),
+                                    Expanded(child: Text('${product.name} - R\$ ${product.price.toStringAsFixed(2)}')),
                                     const SizedBox(width: 16),
                                     SizedBox(
                                       width: 120,
@@ -247,7 +249,13 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
                     onPressed: () {
                       Navigator.of(context).pop(selectedProducts);
                     },
-                    child: Text('Confirmar'.toUpperCase()),
+                    child: Text(
+                      'Confirmar'.toUpperCase(),
+                      style: const TextStyle(
+                        color: primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -350,6 +358,7 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
       String purchaseOrder = purchaseOrderController.text;
       String carrier = carrierController.text;
       String fare = fareController.text;
+      String billingDate = billingDateController.text;
       int? selectedClientId = selectedClientBusiness?.id;
       int? selectedSupplierBusinessId = selectedSupplierBusiness?.id;
 
@@ -376,7 +385,8 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
           supplierId: selectedSupplierBusinessId,
           purchaseOrder: purchaseOrder,
           carrier: carrier,
-          fare: fare
+          fare: fare,
+          billingDate: billingDate
       );
 
       String requestBody = jsonEncode(saleRequest.toJson());
@@ -653,6 +663,21 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
                             },
                           ),
                         ),
+                      ),
+                      const SizedBox(height: formHeight - 20),
+                      TextFormField(
+                        controller: billingDateController,
+                        decoration: const InputDecoration(
+                          label: Text(tBillingDate),
+                          prefixIcon: Icon(Icons.calendar_today_rounded),
+                        ),
+                        inputFormatters: [
+                          MaskTextInputFormatter(
+                            mask: '##/##/####',
+                            filter: { "#": RegExp(r'[0-9]') },
+                          )
+                        ],
+                        keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: formHeight - 10),
                       SizedBox(
