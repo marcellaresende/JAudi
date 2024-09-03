@@ -116,152 +116,136 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
     final result = await showDialog<List<ProductQttRequest>>(
       context: context,
       builder: (BuildContext context) {
-
         return StatefulBuilder(
           builder: (context, setState) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              double elementWidth;
-              if (constraints.maxWidth < 800) {
-                elementWidth = double.infinity;
-              } else {
-                elementWidth = constraints.maxWidth * 0.3;
-              }
-
-              return AlertDialog(
-                title: Text('Selecionar Produtos', style: Theme.of(context).textTheme.headline4),
-                content: Container(
-                  width: elementWidth,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: searchController,
-                        decoration: const InputDecoration(
-                            labelText: 'Pesquisar Produto'),
-                        onChanged: (value) {
-                          setState(() {
-                            filteredProducts = products
-                                .where((product) =>
-                                product.name.toLowerCase().contains(
-                                    value.toLowerCase()))
-                                .toList();
-                          });
-                        },
+            return AlertDialog(
+              title: Text('Selecionar Produtos', style: Theme.of(context).textTheme.headline4),
+              content: Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: searchController,
+                      decoration: const InputDecoration(
+                        labelText: 'Pesquisar Produto',
                       ),
-                      const SizedBox(height: 16),
-                      Expanded(
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: (searchController.text.isEmpty
-                              ? products
-                              : filteredProducts)
-                              .map((product) {
-                            final isSelected = selectedProducts.any((p) =>
-                            p.idProduct == product.id);
-                            final selectedProduct = selectedProducts.firstWhere(
-                                  (p) => p.idProduct == product.id,
-                              orElse: () => ProductQttRequest(
-                                  idProduct: product.id, qtt: 1),
+                      onChanged: (value) {
+                        setState(() {
+                          filteredProducts = products
+                              .where((product) => product.name.toLowerCase().contains(value.toLowerCase()))
+                              .toList();
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.4, // Tamanho fixo para a lista de produtos
+                      child: ListView(
+                        children: (searchController.text.isEmpty ? products : filteredProducts)
+                            .map((product) {
+                          final isSelected = selectedProducts.any((p) => p.idProduct == product.id);
+                          final selectedProduct = selectedProducts.firstWhere(
+                                (p) => p.idProduct == product.id,
+                            orElse: () => ProductQttRequest(idProduct: product.id, qtt: 1),
+                          );
+
+                          if (!quantityControllers.containsKey(product.id)) {
+                            quantityControllers[product.id] = TextEditingController(
+                              text: isSelected ? '${selectedProduct.qtt}' : '',
                             );
+                          }
 
-                            if (!quantityControllers.containsKey(product.id)) {
-                              quantityControllers[product.id] = TextEditingController(
-                                text: isSelected ? '${selectedProduct.qtt}' : '',
-                              );
-                            }
-
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (isSelected) {
-                                    selectedProducts.removeWhere((p) => p.idProduct == product.id);
-                                    quantityControllers[product.id]?.clear();
-                                  } else {
-                                    selectedProducts.add(selectedProduct);
-                                  }
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Row(
-                                  children: [
-                                    AnimatedContainer(
-                                      duration: const Duration(milliseconds: 300),
-                                      width: 20,
-                                      height: 20,
-                                      decoration: BoxDecoration(
-                                        color: isSelected ? Colors.green : Colors.transparent,
-                                        border: Border.all(
-                                          color: isSelected ? Colors.green : Colors.grey,
-                                        ),
-                                        borderRadius: BorderRadius.circular(50),
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (isSelected) {
+                                  selectedProducts.removeWhere((p) => p.idProduct == product.id);
+                                  quantityControllers[product.id]?.clear();
+                                } else {
+                                  selectedProducts.add(selectedProduct);
+                                }
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Row(
+                                children: [
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 300),
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      color: isSelected ? Colors.green : Colors.transparent,
+                                      border: Border.all(
+                                        color: isSelected ? Colors.green : Colors.grey,
                                       ),
-                                      child: isSelected
-                                          ? const Icon(Icons.check, color: Colors.white, size: 14)
-                                          : null,
+                                      borderRadius: BorderRadius.circular(50),
                                     ),
-                                    const SizedBox(width: 16),
-                                    Expanded(child: Text('${product.name} - R\$ ${product.price.toStringAsFixed(2)}')),
-                                    const SizedBox(width: 16),
-                                    SizedBox(
-                                      width: 120,
-                                      height: 30,
-                                      child: TextField(
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                        decoration: const InputDecoration(
-                                          labelText: 'Quantidade',
-                                          isDense: true,
-                                        ),
-                                        controller: quantityControllers[product.id],
-                                        onChanged: (value) {
-                                          final quantity = int.tryParse(value) ?? 0;
-                                          setState(() {
-                                            if (quantity > 0) {
-                                              if (!isSelected) {
-                                                selectedProducts.add(ProductQttRequest(
-                                                  idProduct: product.id,
-                                                  qtt: quantity,
-                                                ));
-                                              } else {
-                                                selectedProduct.qtt = quantity;
-                                              }
+                                    child: isSelected
+                                        ? const Icon(Icons.check, color: Colors.white, size: 14)
+                                        : null,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(child: Text('${product.name} - R\$ ${product.price.toStringAsFixed(2)}')),
+                                  const SizedBox(width: 16),
+                                  SizedBox(
+                                    width: 120,
+                                    height: 30,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      decoration: const InputDecoration(
+                                        labelText: 'Quantidade',
+                                        isDense: true,
+                                      ),
+                                      controller: quantityControllers[product.id],
+                                      onChanged: (value) {
+                                        final quantity = int.tryParse(value) ?? 0;
+                                        setState(() {
+                                          if (quantity > 0) {
+                                            if (!isSelected) {
+                                              selectedProducts.add(ProductQttRequest(
+                                                idProduct: product.id,
+                                                qtt: quantity,
+                                              ));
                                             } else {
-                                              selectedProducts.removeWhere((p) => p.idProduct == product.id);
+                                              selectedProduct.qtt = quantity;
                                             }
-                                          });
-                                        },
-                                      ),
+                                          } else {
+                                            selectedProducts.removeWhere((p) => p.idProduct == product.id);
+                                          }
+                                        });
+                                      },
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(selectedProducts);
-                    },
-                    child: Text(
-                      'Confirmar'.toUpperCase(),
-                      style: const TextStyle(
-                        color: primaryColor,
-                        fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(selectedProducts);
+                  },
+                  child: Text(
+                    'Confirmar'.toUpperCase(),
+                    style: const TextStyle(
+                      color: primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ],
-              );
-            },
-          );
-        });
+                ),
+              ],
+            );
+          },
+        );
       },
     );
 
@@ -271,6 +255,7 @@ class _UpdateSaleScreen extends State<UpdateSaleScreen> {
       });
     }
   }
+
 
   Future<void> fetchClientId() async {
     try {
